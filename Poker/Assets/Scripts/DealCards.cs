@@ -6,23 +6,27 @@ using UnityEngine.UI;
 
 public class DealCards : MonoBehaviour
 {
-    public List<Sprite> allCardSprites; // Все карты
-    public Image[] communitySlots;      // Слоты для общих карт (например, 2 или 3)
-    public Image[] playerSlots;         // Слоты для карт игрока (например, 2 или 5)
+    public List<Sprite> allCardSprites;
+    public Image[] communitySlots;
+    public Image[] playerSlots;
     public Button dealButton;
-
-    private List<Sprite> remainingCards; // Карты, оставшиеся после раздачи общих
-
+    private List<Sprite> remainingCards;
+    public GameObject combos;
+    private bool isCombosOpn = false;
+    private float checkCount = 0;
+    public GameObject cardCloser;
     void Start()
     {
-        // Создаем копию списка всех карт
         remainingCards = new List<Sprite>(allCardSprites);
-
-        // Раздаем общие карты
         DealCommunityCards();
-
-        // Назначаем обработчик для кнопки
         dealButton.onClick.AddListener(DealPlayerCard);
+    }
+    private void Update()
+    {
+        if (checkCount == 5)
+        {
+            cardCloser.SetActive(false);
+        }
     }
 
     void DealCommunityCards()
@@ -42,10 +46,9 @@ public class DealCards : MonoBehaviour
 
     public void DealPlayerCard()
     {
-        // Находим первый свободный слот у игрока
         for (int i = 0; i < playerSlots.Length; i++)
         {
-            if (playerSlots[i].sprite == null || playerSlots[i].sprite.name == "") // Проверка на пустой слот
+            if (playerSlots[i].sprite == null || playerSlots[i].sprite.name == "")
             {
                 if (remainingCards.Count == 0)
                 {
@@ -58,12 +61,26 @@ public class DealCards : MonoBehaviour
 
                 playerSlots[i].sprite = sprite;
                 remainingCards.RemoveAt(randIndex);
-                break; // Выдали одну карту — выходим из цикла
+                break;
             }
         }
+        checkCount++;
     }
     public void RestartScene()
     {
         SceneManager.LoadScene("SampleScene");
+    }
+    public void OpenCombs()
+    {
+        if (!isCombosOpn)
+        {
+            combos.SetActive(true);
+            isCombosOpn = true;
+        }
+        else
+        {
+            combos.SetActive(false);
+            isCombosOpn = false;
+        }
     }
 }
