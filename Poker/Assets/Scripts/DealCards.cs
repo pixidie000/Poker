@@ -6,18 +6,18 @@ using UnityEngine.UI;
 
 public class DealCards : MonoBehaviour
 {
-    public List<Sprite> allCardSprites;
+    public List<CardValue> allCardSprites;
     public Image[] communitySlots;
     public Image[] playerSlots;
     public Button dealButton;
-    private List<Sprite> remainingCards;
+    private List<CardValue> remainingCards;
     public GameObject combos;
     private bool isCombosOpn = false;
     private float checkCount = 0;
     public GameObject cardCloser;
     void Start()
     {
-        remainingCards = new List<Sprite>(allCardSprites);
+        remainingCards = new List<CardValue>(allCardSprites);
         DealCommunityCards();
         dealButton.onClick.AddListener(DealPlayerCard);
     }
@@ -36,7 +36,7 @@ public class DealCards : MonoBehaviour
             if (remainingCards.Count == 0) break;
 
             int randIndex = Random.Range(0, remainingCards.Count);
-            Sprite sprite = remainingCards[randIndex];
+            Sprite sprite = remainingCards[randIndex].sprite;
 
             communitySlots[i].sprite = sprite;
 
@@ -57,7 +57,7 @@ public class DealCards : MonoBehaviour
                 }
 
                 int randIndex = Random.Range(0, remainingCards.Count);
-                Sprite sprite = remainingCards[randIndex];
+                Sprite sprite = remainingCards[randIndex].sprite;
 
                 playerSlots[i].sprite = sprite;
                 remainingCards.RemoveAt(randIndex);
